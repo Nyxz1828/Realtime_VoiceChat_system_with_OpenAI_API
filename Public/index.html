@@ -41,7 +41,30 @@
         </div>
       </div>
       
+      <div class="flex items-center gap-3">
+        
 
+        <p class="mt-2 text-sm text-zinc-400">
+          Phone Call
+        </p>
+
+        <button
+          id="callBtn"
+          class="flex h-10 min-w-[100px] items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-100 px-5 text-sm font-semibold text-zinc-900 shadow-lg shadow-black/20 transition hover:bg-white active:scale-95"
+          title="Call"
+        >
+          Call
+        </button>
+
+        <button
+          id="end_callBtn"
+          disabled
+          class="flex h-10 min-w-[100px] items-center justify-center rounded-2xl border border-red-700 bg-red-600 px-5 text-sm font-semibold text-white shadow-lg shadow-red-900/30 transition hover:border-red-600 hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:border-red-900 disabled:bg-red-900/40 disabled:text-red-200/60 disabled:opacity-60"
+          title="End Call"
+        >
+          End Call
+        </button>
+      </div>
       <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
         <!-- Language Switch -->
         <div class="flex items-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-2 shadow-sm shadow-black/20">
@@ -61,43 +84,119 @@
     <!-- Main Panels -->
     <section class="grid grid-cols-1 gap-6 lg:grid-cols-12">
       
-      <!-- Chat Log - smaller -->
+      <!-- Conversation -->
       <div class="lg:col-span-5">
         <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
           <div class="border-b border-zinc-800 px-5 py-4">
-            <h2 class="text-lg font-semibold text-zinc-100">Chat Log</h2>
-            <p class="mt-1 text-sm text-zinc-500">Conversation transcript and assistant messages</p>
+            <h2 id="conversationTitle" class="text-lg font-semibold text-zinc-100">Conversation</h2>
+            <p id="conversationDesc" class="mt-1 text-sm text-zinc-500">What you said and what the assistant replied</p>
           </div>
 
           <div
             id="User_transcript"
-            class="min-h-[360px] max-h-[520px] overflow-y-auto px-5 py-4 text-sm leading-7 text-zinc-300 whitespace-pre-wrap break-words"
+            class="min-h-[320px] max-h-[480px] overflow-y-auto px-5 py-4 text-sm leading-7 text-zinc-300 whitespace-pre-wrap break-words"
           ></div>
+
+          <form id="textChatForm" class="flex gap-3 border-t border-zinc-800 p-4">
+            <input
+              id="textChatInput"
+              type="text"
+              autocomplete="off"
+              placeholder="Type a message after starting the session..."
+              class="min-w-0 flex-1 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+            />
+            <button
+              id="textChatSend"
+              type="submit"
+              class="rounded-xl border border-zinc-700 bg-zinc-100 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Send
+            </button>
+          </form>
         </div>
       </div>
 
-      <!-- Console Log - bigger -->
+      <!-- Latest AI reply -->
       <div class="lg:col-span-7">
         <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
           <div class="border-b border-zinc-800 px-5 py-4">
-            <h2 class="text-lg font-semibold text-zinc-100">Console Log</h2>
-            <p class="mt-1 text-sm text-zinc-500">Realtime events, state changes, and debug output</p>
+            <h2 id="aiReplyTitle" class="text-lg font-semibold text-zinc-100">AI Reply Text</h2>
+            <p id="aiReplyDesc" class="mt-1 text-sm text-zinc-500">Latest assistant reply transcript</p>
           </div>
 
           <div
-            id="log"
-            class="min-h-[360px] max-h-[520px] overflow-y-auto px-5 py-4 font-mono text-sm leading-7 text-zinc-400 whitespace-pre-wrap break-words"
-          ></div>
+            id="aiReplyText"
+            class="min-h-[412px] max-h-[560px] overflow-y-auto px-5 py-4 text-base leading-8 text-zinc-100 whitespace-pre-wrap break-words"
+          >No reply yet.</div>
         </div>
       </div>
     </section>
+
+    <section class="mt-6">
+      <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
+        <div class="border-b border-zinc-800 px-5 py-4">
+          <h2 id="consoleTitle" class="text-lg font-semibold text-zinc-100">Console Log</h2>
+          <p id="consoleDesc" class="mt-1 text-sm text-zinc-500">Realtime events, state changes, and debug output</p>
+        </div>
+
+        <div
+          id="log"
+          class="min-h-[220px] max-h-[360px] overflow-y-auto px-5 py-4 font-mono text-sm leading-7 text-zinc-400 whitespace-pre-wrap break-words"
+        ></div>
+      </div>
+    </section>
+
+<!-- audio selection -->
+ <section class="mt-6 flex w-full flex-col items-start">
+  <div class="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900/90 p-5 shadow-xl shadow-black/20">
+    <div class="mb-4">
+      <h3  id="audioSectionTitle" class="text-base font-semibold text-white">Audio Device Settings</h3>
+      <p  id="audioSectionDesc" class="mt-1 text-sm text-zinc-400" >
+        Choose the microphone input and speaker output for the voice session.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label  id="audioInputLabel" for="audioInputSelect" class="mb-2 block text-sm font-medium text-zinc-200">
+          Audio Input
+        </label>
+        <select
+          id="audioInputSelect"
+          class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+        >
+          <option value="">Default System Input</option>
+        </select>
+        <p id="audioInputHint" class="mt-2 text-xs text-zinc-500">
+          Uses your system default microphone if no device is selected.
+        </p>
+      </div>
+
+      <div>
+        <label id="audioOutputLabel" for="audioOutputSelect" class="mb-2 block text-sm font-medium text-zinc-200">
+          Audio Output
+        </label>
+        <select
+          id="audioOutputSelect"
+          class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30"
+        >
+          <option value="">Default System Output</option>
+        </select>
+        <p id="audioOutputHint" class="mt-2 text-xs text-zinc-500">
+          Uses your system default speaker if no device is selected.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- Prompt -->
     <section class="mt-6">
       <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
         <div class="border-b border-zinc-800 px-5 py-4">
-          <h2 class="text-lg font-semibold text-zinc-100">Prompt</h2>
-          <p class="mt-1 text-sm text-zinc-500">Current instruction payload / loaded prompt</p>
+          <h2 id="promptTitle" class="text-lg font-semibold text-zinc-100">Prompt</h2>
+          <p id="promptDesc" class="mt-1 text-sm text-zinc-500">Current instruction payload / loaded prompt</p>
         </div>
 
         <pre
@@ -107,7 +206,6 @@
       </div>
     </section>
 
-  </div>
 
 
 <!-- for loading Logs -->
@@ -124,15 +222,30 @@
 
     function write(message) {
       log.textContent += message + "\n";
+      log.scrollTop = log.scrollHeight;
+    }
 
-      if (message.includes("transcript:") || message.includes("Assistant transcript:")) {
-        USRER_TRANSCRIPT.textContent += message + "\n";
-      }
+    function addToConversation(role, text) {
+      // Add to display
+      const timeStamp = new Date().toLocaleTimeString();
+      const displayText = role === "user" 
+        ? `🎤 You (${timeStamp}): ${text}\n`
+        : `🤖 Assistant (${timeStamp}): ${text}\n`;
+      
+      USRER_TRANSCRIPT.textContent += displayText;
+      USRER_TRANSCRIPT.scrollTop = USRER_TRANSCRIPT.scrollHeight;
+      
+      // Send to server
+      fetch("http://localhost:3000/conversation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role, text })
+      }).catch(err => console.error("Failed to save conversation:", err));
     }
 
     async function startVoice() {
       startBtn.disabled = true;
-
+      
       try {
         write("Fetching client secret...");
         const tokenResp = await fetch("http://localhost:3000/session");
@@ -179,10 +292,12 @@
 
             if (msg.type === "response.audio_transcript.done") {
               write("Assistant transcript: " + msg.transcript);
+              addToConversation("assistant", msg.transcript);
             }
 
             if (msg.type === "conversation.item.input_audio_transcription.completed") {
               write("User transcript: " + msg.transcript);
+              addToConversation("user", msg.transcript);
             }
           } catch {
             write("RAW: " + event.data);
@@ -251,53 +366,661 @@
       stopBtn.disabled = true;
     }
 
-    startBtn.addEventListener("click", startVoice);
-    stopBtn.addEventListener("click", stopVoice);
+    // The audio-device script below owns Start/Stop. Leaving this older
+    // prototype unbound prevents one click from opening two Realtime sessions.
   </script>
 
 
 <!-- for language selection -->
 <script>
-  const langButtons = document.querySelectorAll("#lang-en, #lang-zh");
+  const langEnBtn = document.getElementById("lang-en");
+  const langZhBtn = document.getElementById("lang-zh");
+  const langButtons = [langEnBtn, langZhBtn];
 
-  langButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      langButtons.forEach((b) => {
-        b.className =
-          "rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-600 hover:bg-zinc-800";
-      });
+  const translations = {
+    en: {
+      htmlLang: "en",
+      pageTitle: "Voice to Voice Demo",
+      headerTag: "Realtime Demo",
+      mainTitle: "Voice to Voice Demo",
+      mainDesc: "Live session interface with transcript, console log, and prompt panel.",
+      start: "Start",
+      stop: "Stop",
+      phoneCall: "Phone Call",
+      call: "Call",
+      endCall: "End Call",
+      language: "Language",
+      chatLogTitle: "Chat Log",
+      chatLogDesc: "Conversation transcript and assistant messages",
+      conversationTitle: "Conversation",
+      conversationDesc: "What you said and what the assistant replied",
+      aiReplyTitle: "AI Reply Text",
+      aiReplyDesc: "Latest assistant reply transcript",
+      consoleLogTitle: "Console Log",
+      consoleLogDesc: "Realtime events, state changes, and debug output",
+      promptTitle: "Prompt",
+      promptDesc: "Current instruction payload / loaded prompt",
+      audioSectionTitle: "Audio Device Settings",
+      audioSectionDesc: "Choose the microphone input and speaker output for the voice session.",
+      audioInputLabel: "Audio Input",
+      audioInputHint: "Uses your system default microphone if no device is selected.",
+      audioOutputLabel: "Audio Output",
+      audioOutputHint: "Uses your system default speaker if no device is selected.",
+      defaultInput: "Default System Input",
+      defaultOutput: "Default System Output",
+      loading: "Loading..."
+    },
+    zh: {
+      htmlLang: "zh-Hant",
+      pageTitle: "語音對語音示範",
+      headerTag: "即時示範",
+      mainTitle: "語音對語音示範",
+      mainDesc: "即時對話介面，包含對話紀錄、主控台日誌與提示詞面板。",
+      start: "開始",
+      stop: "停止",
+      phoneCall: "電話通話",
+      call: "撥號",
+      endCall: "結束通話",
+      language: "語言",
+      chatLogTitle: "聊天紀錄",
+      chatLogDesc: "對話逐字稿與助理訊息",
+      consoleLogTitle: "主控台日誌",
+      consoleLogDesc: "即時事件、狀態變更與除錯輸出",
+      promptTitle: "提示詞",
+      promptDesc: "目前載入的指令內容 / 提示詞",
+      audioSectionTitle: "音訊裝置設定",
+      audioSectionDesc: "選擇語音通話要使用的麥克風輸入與喇叭輸出。",
+      audioInputLabel: "音訊輸入",
+      audioInputHint: "若未選擇裝置，將使用系統預設麥克風。",
+      audioOutputLabel: "音訊輸出",
+      audioOutputHint: "若未選擇裝置，將使用系統預設喇叭。",
+      defaultInput: "系統預設輸入",
+      defaultOutput: "系統預設輸出",
+      loading: "載入中..."
+    }
+  };
 
+  function setButtonActive(activeBtn) {
+    langButtons.forEach((btn) => {
       btn.className =
-        "rounded-xl border border-zinc-700 bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-white";
+        "rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-600 hover:bg-zinc-800";
     });
-  });
-</script>
 
+    activeBtn.className =
+      "rounded-xl border border-zinc-700 bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-white";
+  }
 
+  function setLanguage(lang) {
+    const t = translations[lang];
 
+    document.documentElement.lang = t.htmlLang;
+    document.title = t.pageTitle;
 
+    document.querySelector("header p.text-xs.uppercase.tracking-\\[0\\.25em\\].text-zinc-500").textContent = t.headerTag;
+    document.querySelector("header h1").textContent = t.mainTitle;
+    document.querySelector("header h1 + p").textContent = t.mainDesc;
 
- 
-<!-- for loading JSON -->
-  <script>
-    async function loadJSON() {
-      try {
-        const response = await fetch('./instruct.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
+    document.getElementById("startBtn").textContent = t.start;
+    document.getElementById("startBtn").title = t.start;
 
-        const data = await response.json();
-        document.getElementById('output').textContent =
-          JSON.stringify(data, null, 2);
-      } catch (error) {
-        document.getElementById('output').textContent =
-          'Error: ' + error.message;
+    document.getElementById("stopBtn").textContent = t.stop;
+    document.getElementById("stopBtn").title = t.stop;
+
+    document.querySelector('p.mt-2.text-sm.text-zinc-400').textContent = t.phoneCall;
+
+    document.getElementById("callBtn").textContent = t.call;
+    document.getElementById("callBtn").title = t.call;
+
+    document.getElementById("end_callBtn").textContent = t.endCall;
+    document.getElementById("end_callBtn").title = t.endCall;
+
+    document.querySelector("span.px-2.text-xs.font-medium.uppercase.tracking-widest.text-zinc-500").textContent = t.language;
+    document.getElementById("lang-zh").textContent = "繁中";
+    document.getElementById("lang-en").textContent = "EN";
+
+    document.getElementById("conversationTitle").textContent = t.conversationTitle || "Conversation";
+    document.getElementById("conversationDesc").textContent = t.conversationDesc || "What you said and what the assistant replied";
+    document.getElementById("aiReplyTitle").textContent = t.aiReplyTitle || "AI Reply Text";
+    document.getElementById("aiReplyDesc").textContent = t.aiReplyDesc || "Latest assistant reply transcript";
+    document.getElementById("consoleTitle").textContent = t.consoleLogTitle;
+    document.getElementById("consoleDesc").textContent = t.consoleLogDesc;
+    document.getElementById("promptTitle").textContent = t.promptTitle;
+    document.getElementById("promptDesc").textContent = t.promptDesc;
+
+    const output = document.getElementById("output");
+    if (output.textContent.trim() === "Loading..." || output.textContent.trim() === "載入中...") {
+      output.textContent = t.loading;
+    }
+
+    const audioSectionTitle = document.getElementById("audioSectionTitle");
+    const audioSectionDesc = document.getElementById("audioSectionDesc");
+    const audioInputLabel = document.getElementById("audioInputLabel");
+    const audioInputHint = document.getElementById("audioInputHint");
+    const audioOutputLabel = document.getElementById("audioOutputLabel");
+    const audioOutputHint = document.getElementById("audioOutputHint");
+    const audioInputSelect = document.getElementById("audioInputSelect");
+    const audioOutputSelect = document.getElementById("audioOutputSelect");
+
+    if (audioSectionTitle) audioSectionTitle.textContent = t.audioSectionTitle;
+    if (audioSectionDesc) audioSectionDesc.textContent = t.audioSectionDesc;
+    if (audioInputLabel) audioInputLabel.textContent = t.audioInputLabel;
+    if (audioInputHint) audioInputHint.textContent = t.audioInputHint;
+    if (audioOutputLabel) audioOutputLabel.textContent = t.audioOutputLabel;
+    if (audioOutputHint) audioOutputHint.textContent = t.audioOutputHint;
+
+    if (audioInputSelect) {
+      const firstInputOption = audioInputSelect.querySelector('option[value=""]');
+      if (firstInputOption) {
+        firstInputOption.textContent = t.defaultInput;
       }
     }
 
-    loadJSON();
-  </script>
+    if (audioOutputSelect) {
+      const firstOutputOption = audioOutputSelect.querySelector('option[value=""]');
+      if (firstOutputOption) {
+        firstOutputOption.textContent = t.defaultOutput;
+      }
+    }
+
+    localStorage.setItem("pageLanguage", lang);
+    setButtonActive(lang === "zh" ? langZhBtn : langEnBtn);
+  }
+
+  langEnBtn.addEventListener("click", () => setLanguage("en"));
+  langZhBtn.addEventListener("click", () => setLanguage("zh"));
+
+  const savedLang = localStorage.getItem("pageLanguage") || "zh";
+  setLanguage(savedLang);
+</script>
+
+
+<!-- audio script -->
+<script>
+  const audioInputSelect_audio = document.getElementById("audioInputSelect");
+  const audioOutputSelect_audio = document.getElementById("audioOutputSelect");
+  const log_audio = document.getElementById("log");
+  const startBtn_audio = document.getElementById("startBtn");
+  const stopBtn_audio = document.getElementById("stopBtn");
+  const USRER_TRANSCRIPT_audio = document.getElementById("User_transcript");
+  const aiReplyText_audio = document.getElementById("aiReplyText");
+  const textChatForm_audio = document.getElementById("textChatForm");
+  const textChatInput_audio = document.getElementById("textChatInput");
+  const textChatSend_audio = document.getElementById("textChatSend");
+
+  let pc_audio = null;
+  let localStream_audio = null;
+  let remoteAudio_audio = null;
+  let dc_audio = null;
+  let activeAssistantText_audio = "";
+
+  function write_audio(message) {
+    if (log_audio) {
+      log_audio.textContent += message + "\n";
+      log_audio.scrollTop = log_audio.scrollHeight;
+    }
+  }
+
+  function addToConversation_audio(role, text) {
+    // Add to display
+    const timeStamp = new Date().toLocaleTimeString();
+    const displayText = role === "user" 
+      ? `🎤 You (${timeStamp}): ${text}\n`
+      : `🤖 Assistant (${timeStamp}): ${text}\n`;
+    
+    if (USRER_TRANSCRIPT_audio) {
+      USRER_TRANSCRIPT_audio.textContent += displayText;
+      USRER_TRANSCRIPT_audio.scrollTop = USRER_TRANSCRIPT_audio.scrollHeight;
+    }
+    
+    // Send to server
+    fetch("http://localhost:3000/conversation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, text })
+    }).catch(err => console.error("Failed to save conversation:", err));
+  }
+
+  function setLatestAiReply_audio(text) {
+    if (!text || !aiReplyText_audio) return;
+    aiReplyText_audio.textContent = text;
+    aiReplyText_audio.scrollTop = aiReplyText_audio.scrollHeight;
+  }
+
+  function addConversationEntry_audio(role, text) {
+    if (!text) return;
+
+    const timeStamp = new Date().toLocaleTimeString();
+    const displayText = role === "user"
+      ? `You (${timeStamp}): ${text}\n`
+      : `Assistant (${timeStamp}): ${text}\n`;
+
+    if (USRER_TRANSCRIPT_audio) {
+      USRER_TRANSCRIPT_audio.textContent += displayText;
+      USRER_TRANSCRIPT_audio.scrollTop = USRER_TRANSCRIPT_audio.scrollHeight;
+    }
+
+    if (role === "assistant") {
+      setLatestAiReply_audio(text);
+    }
+
+    fetch("http://localhost:3000/conversation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, text })
+    }).catch(err => console.error("Failed to save conversation:", err));
+  }
+
+  function handleRealtimeMessage_audio(msg_audio) {
+    write_audio("EVENT: " + msg_audio.type);
+
+    if (msg_audio.type === "response.created") {
+      activeAssistantText_audio = "";
+    }
+
+    function extractTextFromContent_audio(content) {
+      if (!content) return "";
+      if (typeof content === "string") return content;
+      if (!Array.isArray(content)) return "";
+
+      return content
+        .map((part) => part?.text || part?.transcript || "")
+        .filter(Boolean)
+        .join("");
+    }
+
+    const assistantDelta =
+      msg_audio.delta ||
+      msg_audio.text ||
+      msg_audio.transcript ||
+      msg_audio.audio_transcript;
+
+    if (
+      msg_audio.type === "response.audio_transcript.delta" ||
+      msg_audio.type === "response.output_audio_transcript.delta" ||
+      msg_audio.type === "response.output_text.delta" ||
+      msg_audio.type === "response.text.delta"
+    ) {
+      activeAssistantText_audio += assistantDelta || "";
+      setLatestAiReply_audio(activeAssistantText_audio);
+      return;
+    }
+
+    if (
+      msg_audio.type === "response.audio_transcript.done" ||
+      msg_audio.type === "response.output_audio_transcript.done" ||
+      msg_audio.type === "response.output_text.done" ||
+      msg_audio.type === "response.text.done"
+    ) {
+      const finalText = msg_audio.transcript || msg_audio.text || activeAssistantText_audio;
+      write_audio("Assistant reply: " + finalText);
+      addConversationEntry_audio("assistant", finalText);
+      activeAssistantText_audio = "";
+      return;
+    }
+
+    if (
+      msg_audio.type === "conversation.item.done" &&
+      msg_audio.item?.role === "assistant"
+    ) {
+      const finalText =
+        extractTextFromContent_audio(msg_audio.item.content) ||
+        activeAssistantText_audio;
+
+      if (finalText) {
+        addConversationEntry_audio("assistant", finalText);
+        activeAssistantText_audio = "";
+      }
+      return;
+    }
+
+    if (msg_audio.type === "conversation.item.input_audio_transcription.completed") {
+      write_audio("User transcript: " + msg_audio.transcript);
+      addConversationEntry_audio("user", msg_audio.transcript);
+    }
+  }
+
+  function sendTextMessage_audio(text) {
+    if (!dc_audio || dc_audio.readyState !== "open") {
+      throw new Error("Start the voice session before sending text.");
+    }
+
+    dc_audio.send(JSON.stringify({
+      type: "conversation.item.create",
+      item: {
+        type: "message",
+        role: "user",
+        content: [
+          {
+            type: "input_text",
+            text
+          }
+        ]
+      }
+    }));
+
+    dc_audio.send(JSON.stringify({
+      type: "response.create"
+    }));
+  }
+
+  async function loadAudioDevices_audio() {
+    try {
+      const tempStream_audio = await navigator.mediaDevices.getUserMedia({ audio: true });
+      tempStream_audio.getTracks().forEach(track_audio => track_audio.stop());
+
+      const devices_audio = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs_audio = devices_audio.filter(device_audio => device_audio.kind === "audioinput");
+      const audioOutputs_audio = devices_audio.filter(device_audio => device_audio.kind === "audiooutput");
+
+      audioInputSelect_audio.innerHTML = `<option value="">Default System Input</option>`;
+      audioOutputSelect_audio.innerHTML = `<option value="">Default System Output</option>`;
+
+      audioInputs_audio.forEach((device_audio, index_audio) => {
+        const option_audio = document.createElement("option");
+        option_audio.value = device_audio.deviceId;
+        option_audio.textContent = device_audio.label || `Microphone ${index_audio + 1}`;
+        audioInputSelect_audio.appendChild(option_audio);
+      });
+
+      audioOutputs_audio.forEach((device_audio, index_audio) => {
+        const option_audio = document.createElement("option");
+        option_audio.value = device_audio.deviceId;
+        option_audio.textContent = device_audio.label || `Speaker ${index_audio + 1}`;
+        audioOutputSelect_audio.appendChild(option_audio);
+      });
+
+      write_audio("Audio input/output list loaded.");
+    } catch (err) {
+      console.error(err);
+      write_audio("ERROR loading audio devices: " + err.message);
+    }
+  }
+
+  async function getSelectedAudioStream_audio() {
+    const selectedDeviceId_audio = audioInputSelect_audio.value;
+
+    if (!selectedDeviceId_audio) {
+      write_audio("Using default system audio input...");
+      return await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+    }
+
+    write_audio("Using selected audio input device...");
+    return await navigator.mediaDevices.getUserMedia({
+      audio: {
+        deviceId: { exact: selectedDeviceId_audio }
+      }
+    });
+  }
+
+  async function setAudioOutputDevice_audio() {
+    if (!remoteAudio_audio) return;
+
+    const selectedOutputDeviceId_audio = audioOutputSelect_audio.value;
+
+    if (!selectedOutputDeviceId_audio) {
+      write_audio("Using default system audio output...");
+      return;
+    }
+
+    if (typeof remoteAudio_audio.setSinkId !== "function") {
+      write_audio("This browser does not support selecting audio output device.");
+      return;
+    }
+
+    try {
+      await remoteAudio_audio.setSinkId(selectedOutputDeviceId_audio);
+      write_audio("Using selected audio output device.");
+    } catch (err) {
+      console.error(err);
+      write_audio("ERROR setting audio output device: " + err.message);
+    }
+  }
+
+  async function startVoice_audio() {
+    startBtn_audio.disabled = true;
+
+    try {
+      write_audio("Fetching client secret...");
+      const tokenResp_audio = await fetch("http://localhost:3000/session");
+      const tokenData_audio = await tokenResp_audio.json();
+      const EPHEMERAL_KEY_audio = tokenData_audio.value;
+
+      if (!tokenResp_audio.ok) {
+        throw new Error("Session request failed: " + JSON.stringify(tokenData_audio, null, 2));
+      }
+
+      if (!tokenData_audio.value) {
+        throw new Error("Missing ephemeral key in response: " + JSON.stringify(tokenData_audio, null, 2));
+      }
+
+      write_audio("Opening microphone...");
+      localStream_audio = await getSelectedAudioStream_audio();
+
+      const audioTrack_audio = localStream_audio.getAudioTracks()[0];
+      if (audioTrack_audio) {
+        const settings_audio = audioTrack_audio.getSettings();
+        write_audio("Connected input deviceId: " + (settings_audio.deviceId || "default/hidden"));
+      }
+
+      pc_audio = new RTCPeerConnection();
+
+      remoteAudio_audio = document.createElement("audio");
+      remoteAudio_audio.autoplay = true;
+
+      pc_audio.ontrack = async (event) => {
+        remoteAudio_audio.srcObject = event.streams[0];
+        await setAudioOutputDevice_audio();
+        write_audio("Remote audio connected.");
+      };
+
+      for (const track_audio of localStream_audio.getTracks()) {
+        pc_audio.addTrack(track_audio, localStream_audio);
+      }
+
+      dc_audio = pc_audio.createDataChannel("oai-events");
+
+      dc_audio.onopen = () => {
+        write_audio("Data channel open.");
+      };
+
+      dc_audio.onmessage = (event) => {
+        try {
+          const msg_audio = JSON.parse(event.data);
+          handleRealtimeMessage_audio(msg_audio);
+        } catch {
+          write_audio("RAW: " + event.data);
+        }
+      };
+
+      const offer_audio = await pc_audio.createOffer();
+      await pc_audio.setLocalDescription(offer_audio);
+
+      write_audio("Sending SDP offer to OpenAI (GA WebRTC)...");
+      const sdpResponse_audio = await fetch("https://api.openai.com/v1/realtime/calls", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${EPHEMERAL_KEY_audio}`,
+          "Content-Type": "application/sdp"
+        },
+        body: offer_audio.sdp
+      });
+
+      const answerSdp_audio = await sdpResponse_audio.text();
+
+      if (!sdpResponse_audio.ok) {
+        throw new Error(answerSdp_audio);
+      }
+
+      await pc_audio.setRemoteDescription({
+        type: "answer",
+        sdp: answerSdp_audio
+      });
+
+      write_audio("Voice session started.");
+      stopBtn_audio.disabled = false;
+    } catch (err) {
+      console.error(err);
+      write_audio("ERROR: " + err.message);
+      startBtn_audio.disabled = false;
+    }
+  }
+
+  function stopVoice_audio() {
+    if (dc_audio) {
+      dc_audio.close();
+      dc_audio = null;
+    }
+
+    if (pc_audio) {
+      pc_audio.getSenders().forEach(sender_audio => {
+        if (sender_audio.track) sender_audio.track.stop();
+      });
+      pc_audio.close();
+      pc_audio = null;
+    }
+
+    if (localStream_audio) {
+      localStream_audio.getTracks().forEach(track_audio => track_audio.stop());
+      localStream_audio = null;
+    }
+
+    if (remoteAudio_audio) {
+      remoteAudio_audio.srcObject = null;
+      remoteAudio_audio = null;
+    }
+
+    write_audio("Voice session stopped.");
+    startBtn_audio.disabled = false;
+    stopBtn_audio.disabled = true;
+  }
+
+  startBtn_audio.addEventListener("click", startVoice_audio);
+  stopBtn_audio.addEventListener("click", stopVoice_audio);
+
+  if (textChatForm_audio) {
+    textChatForm_audio.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const text = textChatInput_audio.value.trim();
+      if (!text) return;
+
+      try {
+        addConversationEntry_audio("user", text);
+        sendTextMessage_audio(text);
+        textChatInput_audio.value = "";
+      } catch (err) {
+        write_audio("Text send error: " + err.message);
+      }
+    });
+  }
+
+  audioOutputSelect_audio.addEventListener("change", async () => {
+    if (remoteAudio_audio) {
+      await setAudioOutputDevice_audio();
+    }
+  });
+
+  window.addEventListener("load", loadAudioDevices_audio);
+  navigator.mediaDevices.addEventListener("devicechange", loadAudioDevices_audio);
+</script>
+
+
+<!-- call button -->
+<script>
+  const callBtn = document.getElementById("callBtn");
+  const endCallBtn = document.getElementById("end_callBtn");
+  const log_phone = document.getElementById("log");
+
+  function write(message) {
+    if (log_phone) {
+      log_phone.textContent += message + "\n";
+    } else {
+      console.log(message);
+    }
+  }
+
+
+
+
+  //call button will trigger this function, which sends a request to the server to start a call. The server will then use the EZUCPhoneAPI to dial the specified number. The response from the server is logged in the console log panel.
+  async function startCall() {
+    try {
+      callBtn.disabled = true;
+      write("Calling...");
+
+      const response = await fetch("http://localhost:3000/call", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Call failed");
+      }
+
+      write("Call started.");
+      endCallBtn.disabled = false;
+    } catch (err) {
+      write("Call error: " + err.message);
+      console.error(err);
+      callBtn.disabled = false;
+      endCallBtn.disabled = false;
+    }
+  }
+
+  //end call button will trigger this function, which sends a request to the server to end the call. The server will then use the EZUCPhoneAPI to hang up the call. The response from the server is logged in the console log panel.
+  async function endCall() {
+    try {
+      endCallBtn.disabled = true;
+      write("Ending call...");
+
+      const response = await fetch("http://localhost:3000/hangup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Hangup failed");
+      }
+
+      write("Call ended.");
+      callBtn.disabled = false;
+    } catch (err) {
+      write("Hangup error: " + err.message);
+      console.error(err);
+      endCallBtn.disabled = false;
+    }
+  }
+
+  callBtn.addEventListener("click", startCall);
+  endCallBtn.addEventListener("click", endCall);
+</script>
+
+
+<!-- Load JSON -->
+<script>
+  async function loadJSON() {
+    try {
+      const response = await fetch("http://localhost:3000/instruction");
+      const data = await response.text();
+      document.getElementById("output").textContent = data;
+    } catch (error) {
+      document.getElementById("output").textContent =
+        "Error: " + error.message;
+    }
+  }
+
+  loadJSON();
+</script>
 
 </body>
 </html>
