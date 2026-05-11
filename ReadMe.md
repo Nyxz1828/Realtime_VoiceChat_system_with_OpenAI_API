@@ -4,6 +4,8 @@ This project is a browser-based voice chat prototype built on the OpenAI Realtim
 
 According to OpenAI’s current documentation, WebRTC is the recommended approach for browser-based realtime voice applications, and once the local audio track is attached, users can start speaking directly.
 
+Purpose: is made to modify for Voice Chatbot or Customer_services.
+
 Reference:
 [https://developers.openai.com/api/docs/guides/realtime-webrtc](https://developers.openai.com/api/docs/guides/realtime-webrtc)
 
