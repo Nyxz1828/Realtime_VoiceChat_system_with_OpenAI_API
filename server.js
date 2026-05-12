@@ -25,7 +25,8 @@ const instructData = JSON.parse(rawData);
 
 // 放進變數
 const instruct = instructData[0];
-const instructionPrompt = [
+
+const baseInstructionPrompt = [
   "You are a helpful and friendly voice assistant.",
   "Have a normal, natural conversation with the user.",
   "Reply clearly and conversationally. Keep replies concise unless the user asks for detail.",
@@ -43,6 +44,22 @@ const instructionPrompt = [
   instruct.Terminate_condition ? `End condition: ${instruct.Terminate_condition}` : "",
   instruct.Ending ? `Closing line: ${instruct.Ending}` : ""
 ].filter(Boolean).join("\n");
+
+function buildInstructionPrompt() {
+  const historyText = conversationHistory
+    .map((message) => {
+      const roleLabel = message.role === "assistant" ? "Assistant" : "User";
+      return `${roleLabel}: ${message.text}`;
+    })
+    .join("\n");
+
+  return [
+    baseInstructionPrompt,
+    historyText ? `Conversation history:\n${historyText}` : ""
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
 
 console.log("Instruction: Simple Chat Mode");
 
@@ -64,7 +81,7 @@ app.get("/session", async (_req, res) => {
         session: {
           type: "realtime",
           model: "gpt-realtime",
-          instructions: instructionPrompt,
+          instructions: buildInstructionPrompt(),
           output_modalities: ["audio"],
           audio: {
             input: {
@@ -151,8 +168,7 @@ app.post("/hangup", async (_req, res) => {
 
 // send instruction
 app.get("/instruction", (req, res) => {
-  //res.send("Send instruction list");
-  res.send(instructionPrompt);
+  res.send(buildInstructionPrompt());
 });
 
 // Get conversation history
