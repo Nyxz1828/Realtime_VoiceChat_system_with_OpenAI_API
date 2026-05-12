@@ -137,8 +137,10 @@ Browser Playback
 
 * This project is designed for browser-based voice chat, not direct phone-line calling.
 * For actual telephony integration, OpenAI documents SIP as the relevant connection path.
+* Please change the phone call code in EZUCPhoneAPI into your personal own ```Cloud Based Call Center System```, this code was personally based on EZUCPhone System.
 * Do not expose your API key in frontend JavaScript.
 * Always keep the OpenAI API key on the backend only.
+
 
 ---
 
