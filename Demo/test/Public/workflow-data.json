@@ -1,0 +1,466 @@
+{
+  "defaultLanguage": "en",
+  "languages": {
+    "en": {
+      "code": "en",
+      "button": "EN",
+      "eyebrow": "Test Workflow",
+      "title": "Dialogue Flow",
+      "summary": "Visual map of the test call path. Edit workflow-data.json to change the workflow, audio files, prompts, and yes/no routing.",
+      "back": "Back to demo",
+      "view": "View",
+      "copy": "Copy Mermaid",
+      "copied": "Copied",
+      "copyFailed": "Copy failed",
+      "sourceTitle": "Mermaid Source",
+      "detailsTitle": "Step Details",
+      "loadError": "Could not load workflow-data.json. Open this page through the test server instead of file explorer.",
+      "views": {
+        "full": "Full workflow",
+        "happy": "Successful booking",
+        "reject": "Rejected call"
+      },
+      "fields": {
+        "mode": "Mode",
+        "audio": "WAV sound",
+        "prompt": "Prompt/history",
+        "previous": "Previous step",
+        "yesNext": "If yes",
+        "noNext": "If no",
+        "noAudio": "No WAV",
+        "okAudio": "OK WAV",
+        "unclearNext": "If unclear",
+        "invalidNext": "If invalid",
+        "stores": "Stores"
+      }
+    },
+    "zh": {
+      "code": "zh",
+      "button": "中文",
+      "eyebrow": "測試流程",
+      "title": "對話流程",
+      "summary": "測試電話流程圖。修改 workflow-data.json 就可以改流程、音檔、提示詞、以及 yes/no 的下一步。",
+      "back": "返回 demo",
+      "view": "顯示",
+      "copy": "複製 Mermaid",
+      "copied": "已複製",
+      "copyFailed": "複製失敗",
+      "sourceTitle": "Mermaid 原始碼",
+      "detailsTitle": "步驟資訊",
+      "loadError": "無法載入 workflow-data.json。請用 test server 開啟，不要直接用檔案總管開。",
+      "views": {
+        "full": "完整流程",
+        "happy": "成功預約",
+        "reject": "拒絕流程"
+      },
+      "fields": {
+        "mode": "模式",
+        "audio": "WAV 音檔",
+        "prompt": "提示詞/紀錄",
+        "previous": "上一個步驟",
+        "yesNext": "如果 yes",
+        "noNext": "如果 no",
+        "noAudio": "No 音檔",
+        "okAudio": "OK 音檔",
+        "unclearNext": "如果不清楚",
+        "invalidNext": "如果無效",
+        "stores": "儲存"
+      }
+    }
+  },
+  "assistant": {
+    "model": "gpt-realtime",
+    "transcriptionModel": "gpt-4o-mini-transcribe",
+    "timezone": "Asia/Kuala_Lumpur",
+    "defaultMode": "default",
+    "textOnlyModes": ["test", "time"],
+    "customer": {
+      "Instructions": "",
+      "Role": "customer service representative",
+      "Slang": "Taiwan conversational style",
+      "Tone": "friendly, enthusiastic, professional",
+      "Style": "conversational, persuasive, concise",
+      "Content": "",
+      "Voice": "marin",
+      "language": "Traditional Chinese",
+      "Company": "Shang Jin Japanese Korean Language School",
+      "Phone": "0975408241",
+      "Customer_name": "Xiao Ming",
+      "Exposure": "104 job posting advertisement",
+      "Activity": "March 2026 workplace skills course",
+      "Terminate_condition": "End the conversation when the customer clearly refuses the course or says they no longer need more information.",
+      "Agreee_condition": "End the conversation when the customer is interested in the course and wants to learn more or purchase. A human customer service representative will continue service.",
+      "Ending": "Thank you for your time. We look forward to providing better service."
+    },
+    "prompts": {
+      "default": [
+        "You are a helpful and friendly voice assistant.",
+        "Have a normal, natural conversation with the user.",
+        "Reply clearly and conversationally. Keep replies concise unless the user asks for detail.",
+        "Your spoken reply will also be shown as text in the web UI.",
+        "If the user confirms they are the intended customer, include this natural phrase in your reply: I'll give you a quick overview.",
+        "If the user says they are not the intended customer or clearly rejects the call, include this natural phrase in your reply: Sorry to bother you.",
+        "If the conversation reaches a clear ending or handoff, include this natural phrase in your reply: Thank you for your time.",
+        "Company: {{customer.Company}}",
+        "Role: {{customer.Role}}",
+        "Tone: {{customer.Tone}}",
+        "Style: {{customer.Style}}",
+        "Language preference: {{customer.language}}",
+        "Customer name: {{customer.Customer_name}}",
+        "Activity: {{customer.Activity}}",
+        "End condition: {{customer.Terminate_condition}}",
+        "Closing line: {{customer.Ending}}"
+      ],
+      "test": [
+        "Test dialogue mode is active.",
+        "The browser plays all dialogue audio locally. Do not produce spoken assistant audio.",
+        "Your only job is to classify the user's latest spoken answer for the current step.",
+        "If the latest answer contains an appointment time, return exactly one line using this format instead of yes/no: yyyy/mm/dd hh:mm | specified time OR yyyy/mm/dd hh:mm | not specified time",
+        "Use 24-hour time. Infer relative dates from today's local date and time: {{localNow}}",
+        "Examples: tomorrow afternoon 2 -> tomorrow at 14:00 | specified time. tomorrow noon -> tomorrow at 12:00 | not specified time. now -> today's current local time | not specified time.",
+        "If the user agrees, confirms, accepts, says yes, or says phrases like yes, correct, ok, sure, reply with exactly: yes",
+        "If the user rejects, disagrees, is not the person, is not interested, says no, reply with exactly: no",
+        "If the answer is unclear, reply with exactly: unclear",
+        "Do not explain your decision and do not add any other words."
+      ],
+      "time": [
+        "Time extraction mode is active.",
+        "The browser plays all dialogue audio locally. Do not produce spoken assistant audio.",
+        "Your only job is to identify the appointment time from the user's latest spoken answer.",
+        "Return exactly one line using this format: yyyy/mm/dd hh:mm | specified time OR yyyy/mm/dd hh:mm | not specified time",
+        "Use 24-hour time.",
+        "Today's local date and time is: {{localNow}}",
+        "If the user gives a relative date or time, infer it from today's local date and time above.",
+        "If the user gives an exact hour or minute, append: | specified time",
+        "If the user gives a broad or relative time without a specific hour, append: | not specified time",
+        "If the user says now, right now, immediately, or asks if now is okay, return today's date and the current local time, then append: | not specified time",
+        "If the user says noon without a date, return today's date at 12:00 unless noon has already passed, then return tomorrow at 12:00, then append: | not specified time",
+        "If the user says tomorrow without a specific time, return tomorrow at 12:00, then append: | not specified time",
+        "If the user says later without a specific time, return today's date one hour after the current local time, then append: | not specified time",
+        "If the user says afternoon, evening, or tonight without a specific hour, use 15:00 for afternoon and 19:00 for evening, then append: | not specified time",
+        "If the date is missing but the time is clear, use today's date unless the time has already passed, then use tomorrow, then append: | specified time",
+        "Only reply unclear when there is no usable time, date, relative time, or broad period.",
+        "Do not explain your decision and do not add any other words."
+      ]
+    }
+  },
+  "views": {
+    "full": {
+      "edges": "all"
+    },
+    "happy": {
+      "edgeLabels": ["click", "ready", "yes", "valid datetime"]
+    },
+    "reject": {
+      "edgeLabels": ["click", "ready", "no"]
+    }
+  },
+  "nodes": {
+    "start": {
+      "type": "start",
+      "col": 1,
+      "row": 1,
+      "title": {
+        "en": "Start Test",
+        "zh": "開始測試"
+      },
+      "detail": {
+        "en": "User clicks Test. Browser prepares the Realtime analysis session.",
+        "zh": "使用者按下 Test，瀏覽器準備 Realtime 分析 session。"
+      },
+      "meta": "testBtn",
+      "data": {
+        "mode": "test",
+        "prompt": "Button event calls startTestFlow().",
+        "previous": "none",
+        "yesNext": "session"
+      }
+    },
+    "session": {
+      "col": 2,
+      "row": 1,
+      "title": {
+        "en": "Ensure Session",
+        "zh": "確認 Session"
+      },
+      "detail": {
+        "en": "Set instruction mode to test. Start voice session if it is not ready.",
+        "zh": "設定 instruction mode 為 test。如果 voice session 還沒準備好，就啟動它。"
+      },
+      "meta": "ensureTestSession()",
+      "data": {
+        "mode": "test",
+        "prompt": "Test dialogue mode is active. Classify the latest spoken answer.",
+        "previous": "start",
+        "yesNext": "identity"
+      }
+    },
+    "identity": {
+      "type": "decision",
+      "col": 3,
+      "row": 1,
+      "title": {
+        "en": "Identity Check",
+        "zh": "確認身份"
+      },
+      "detail": {
+        "en": "Play hi.wav and wait for the customer to confirm identity.",
+        "zh": "播放 hi.wav，等待客戶確認是不是本人。"
+      },
+      "meta": "mode: test",
+      "data": {
+        "mode": "test",
+        "audio": "/DIALOGUE/hi.wav",
+        "prompt": "Step 1: played hi.wav. Waiting for identity confirmation.",
+        "previous": "session",
+        "yesNext": "interest",
+        "noNext": "identityNo",
+        "noAudio": "/DIALOGUE/bye.wav",
+        "unclearNext": "replay"
+      }
+    },
+    "identityNo": {
+      "type": "end",
+      "col": 4,
+      "row": 1,
+      "title": {
+        "en": "End Call",
+        "zh": "結束通話"
+      },
+      "detail": {
+        "en": "If the answer is no, play bye.wav and stop the test flow.",
+        "zh": "如果回答 no，播放 bye.wav 並停止測試流程。"
+      },
+      "meta": "identity -> no",
+      "data": {
+        "audio": "/DIALOGUE/bye.wav",
+        "prompt": "AI detected no for identity. Ending conversation.",
+        "previous": "identity"
+      }
+    },
+    "interest": {
+      "type": "decision",
+      "col": 3,
+      "row": 2,
+      "title": {
+        "en": "Interest Check",
+        "zh": "確認興趣"
+      },
+      "detail": {
+        "en": "Play intro.wav and wait for program interest confirmation.",
+        "zh": "播放 intro.wav，等待客戶確認是否對課程有興趣。"
+      },
+      "meta": "mode: test",
+      "data": {
+        "mode": "test",
+        "audio": "/DIALOGUE/intro.wav",
+        "prompt": "Step 2: played intro.wav. Waiting for program interest confirmation.",
+        "previous": "identity",
+        "yesNext": "time",
+        "noNext": "interestNo",
+        "noAudio": "/DIALOGUE/bye.wav",
+        "unclearNext": "replay"
+      }
+    },
+    "interestNo": {
+      "type": "end",
+      "col": 4,
+      "row": 2,
+      "title": {
+        "en": "End Call",
+        "zh": "結束通話"
+      },
+      "detail": {
+        "en": "If the answer is no, play bye.wav and stop the test flow.",
+        "zh": "如果回答 no，播放 bye.wav 並停止測試流程。"
+      },
+      "meta": "interest -> no",
+      "data": {
+        "audio": "/DIALOGUE/bye.wav",
+        "prompt": "AI detected no for interest. Ending conversation.",
+        "previous": "interest"
+      }
+    },
+    "time": {
+      "type": "decision",
+      "col": 3,
+      "row": 3,
+      "title": {
+        "en": "Ask Appointment Time",
+        "zh": "詢問預約時間"
+      },
+      "detail": {
+        "en": "Play time_inquiry.wav and switch to appointment time extraction.",
+        "zh": "播放 time_inquiry.wav，切換成預約時間擷取模式。"
+      },
+      "meta": "mode: time",
+      "data": {
+        "mode": "time",
+        "audio": "/DIALOGUE/time_inquiry.wav",
+        "prompt": "Step 3: played time_inquiry.wav. Waiting for appointment time. Accept exact times and broad answers like now, noon, tomorrow, later, afternoon, or tonight. Return yyyy/mm/dd hh:mm | specified time for exact hours, or yyyy/mm/dd hh:mm | not specified time for broad/relative answers.",
+        "previous": "interest",
+        "okAudio": "/DIALOGUE/ok.wav",
+        "yesNext": "booked",
+        "invalidNext": "replay",
+        "stores": "voaiScheduledTimes"
+      }
+    },
+    "replay": {
+      "col": 2,
+      "row": 3,
+      "title": {
+        "en": "Replay Current Step",
+        "zh": "重播目前步驟"
+      },
+      "detail": {
+        "en": "If the answer is unclear or invalid, replay the current audio prompt.",
+        "zh": "如果回答不清楚或時間格式無效，就重播目前的音檔提示。"
+      },
+      "meta": "replayCurrentAudio()",
+      "data": {
+        "prompt": "AI returned unclear or could not extract a valid appointment time. Replaying the current audio.",
+        "previous": "identity / interest / time",
+        "yesNext": "return to active step"
+      }
+    },
+    "booked": {
+      "type": "end",
+      "col": 4,
+      "row": 3,
+      "title": {
+        "en": "Save Appointment",
+        "zh": "儲存預約"
+      },
+      "detail": {
+        "en": "Store the parsed datetime, play ok.wav, and end the test flow.",
+        "zh": "儲存解析後的時間，播放 ok.wav，然後結束測試流程。"
+      },
+      "meta": "voaiScheduledTimes",
+      "data": {
+        "audio": "/DIALOGUE/ok.wav",
+        "prompt": "Appointment time saved. Played ok.wav and ended conversation.",
+        "previous": "time",
+        "stores": "datetime, specified time / not specified time, raw"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "start",
+      "to": "session",
+      "label": "click",
+      "labelText": {
+        "en": "click",
+        "zh": "點擊"
+      }
+    },
+    {
+      "from": "session",
+      "to": "identity",
+      "label": "ready",
+      "labelText": {
+        "en": "ready",
+        "zh": "準備完成"
+      }
+    },
+    {
+      "from": "identity",
+      "to": "identityNo",
+      "label": "no",
+      "labelText": {
+        "en": "no",
+        "zh": "不是本人"
+      }
+    },
+    {
+      "from": "identity",
+      "to": "interest",
+      "label": "yes",
+      "labelText": {
+        "en": "yes",
+        "zh": "是本人"
+      }
+    },
+    {
+      "from": "interest",
+      "to": "interestNo",
+      "label": "no",
+      "labelText": {
+        "en": "no",
+        "zh": "沒興趣"
+      }
+    },
+    {
+      "from": "interest",
+      "to": "time",
+      "label": "yes",
+      "labelText": {
+        "en": "yes",
+        "zh": "有興趣"
+      }
+    },
+    {
+      "from": "identity",
+      "to": "replay",
+      "label": "unclear",
+      "labelText": {
+        "en": "unclear",
+        "zh": "不清楚"
+      }
+    },
+    {
+      "from": "interest",
+      "to": "replay",
+      "label": "unclear",
+      "labelText": {
+        "en": "unclear",
+        "zh": "不清楚"
+      }
+    },
+    {
+      "from": "time",
+      "to": "replay",
+      "label": "invalid time",
+      "labelText": {
+        "en": "invalid time",
+        "zh": "時間無效"
+      }
+    },
+    {
+      "from": "replay",
+      "to": "identity",
+      "label": "retry identity",
+      "labelText": {
+        "en": "retry identity",
+        "zh": "重試身份"
+      }
+    },
+    {
+      "from": "replay",
+      "to": "interest",
+      "label": "retry interest",
+      "labelText": {
+        "en": "retry interest",
+        "zh": "重試興趣"
+      }
+    },
+    {
+      "from": "replay",
+      "to": "time",
+      "label": "retry time",
+      "labelText": {
+        "en": "retry time",
+        "zh": "重試時間"
+      }
+    },
+    {
+      "from": "time",
+      "to": "booked",
+      "label": "valid datetime",
+      "labelText": {
+        "en": "valid datetime",
+        "zh": "有效時間"
+      }
+    }
+  ]
+}

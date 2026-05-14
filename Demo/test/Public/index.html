@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voice to Voice Demo</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="workflow.css" />
+</head>
+
+
+<body class="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+  <div class="mx-auto max-w-7xl px-6 py-8">
+    
+    <!-- Header -->
+    <header class="mb-8 flex flex-col gap-5 border-b border-zinc-800 pb-6 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="mb-2 text-xs uppercase tracking-[0.25em] text-zinc-500">Realtime Demo</p>
+        <h1 class="text-3xl font-semibold tracking-tight text-zinc-100">Voice to Voice Demo</h1>
+        <p class="mt-2 text-sm text-zinc-400">
+          Live session interface with transcript, console log, and prompt panel.
+        </p>
+                <!-- Start / Stop -->
+        <div class="flex items-center gap-3">
+          <button
+            id="startBtn"
+            class="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-700 bg-zinc-100 text-sm font-semibold text-zinc-950 shadow-lg shadow-black/30 transition hover:scale-105 hover:bg-white active:scale-95"
+            title="Start"
+          >
+            Start
+          </button>
+
+          <button
+            id="stopBtn"
+            disabled
+            class="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 text-sm font-semibold text-zinc-500 shadow-lg shadow-black/20 transition disabled:cursor-not-allowed disabled:opacity-60"
+            title="Stop"
+          >
+            Stop
+          </button>
+
+          <button
+            id="testBtn"
+            class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-500 bg-amber-400 text-sm font-semibold text-zinc-950 shadow-lg shadow-black/30 transition hover:scale-105 hover:bg-amber-300 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            title="Test"
+          >
+            Test
+          </button>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        
+
+        <p class="mt-2 text-sm text-zinc-400">
+          Phone Call
+        </p>
+
+        <button
+          id="callBtn"
+          class="flex h-10 min-w-[100px] items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-100 px-5 text-sm font-semibold text-zinc-900 shadow-lg shadow-black/20 transition hover:bg-white active:scale-95"
+          title="Call"
+        >
+          Call
+        </button>
+
+        <button
+          id="end_callBtn"
+          disabled
+          class="flex h-10 min-w-[100px] items-center justify-center rounded-2xl border border-red-700 bg-red-600 px-5 text-sm font-semibold text-white shadow-lg shadow-red-900/30 transition hover:border-red-600 hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:border-red-900 disabled:bg-red-900/40 disabled:text-red-200/60 disabled:opacity-60"
+          title="End Call"
+        >
+          End Call
+        </button>
+      </div>
+      <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <!-- Language Switch -->
+        <div class="flex items-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-2 shadow-sm shadow-black/20">
+          <span class="px-2 text-xs font-medium uppercase tracking-widest text-zinc-500">Language</span>
+          <button id="lang-en" class="rounded-xl border border-zinc-700 bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-white">
+            EN
+          </button>
+          <button id="lang-zh" class="rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-600 hover:bg-zinc-800">
+            中文
+          </button>
+        </div>
+
+
+      </div>
+    </header>
+
+    <!-- Main Panels -->
+    <section class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+      
+      <!-- Conversation -->
+      <div class="lg:col-span-5">
+        <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
+          <div class="border-b border-zinc-800 px-5 py-4">
+            <h2 id="conversationTitle" class="text-lg font-semibold text-zinc-100">Conversation</h2>
+            <p id="conversationDesc" class="mt-1 text-sm text-zinc-500">What you said and what the assistant replied</p>
+          </div>
+
+          <div
+            id="User_transcript"
+            class="min-h-[320px] max-h-[480px] overflow-y-auto px-5 py-4 text-sm leading-7 text-zinc-300 whitespace-pre-wrap break-words"
+          ></div>
+
+          <form id="textChatForm" class="flex gap-3 border-t border-zinc-800 p-4">
+            <input
+              id="textChatInput"
+              type="text"
+              autocomplete="off"
+              placeholder="Type a message after starting the session..."
+              class="min-w-0 flex-1 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+            />
+            <button
+              id="textChatSend"
+              type="submit"
+              class="rounded-xl border border-zinc-700 bg-zinc-100 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Latest AI reply -->
+      <div class="lg:col-span-7">
+        <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
+          <div class="border-b border-zinc-800 px-5 py-4">
+            <h2 id="aiReplyTitle" class="text-lg font-semibold text-zinc-100">AI Reply Text</h2>
+            <p id="aiReplyDesc" class="mt-1 text-sm text-zinc-500">Latest assistant reply transcript</p>
+          </div>
+
+          <div
+            id="aiReplyText"
+            class="min-h-[412px] max-h-[560px] overflow-y-auto px-5 py-4 text-base leading-8 text-zinc-100 whitespace-pre-wrap break-words"
+          >No reply yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6">
+      <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
+        <div class="border-b border-zinc-800 px-5 py-4">
+          <h2 id="consoleTitle" class="text-lg font-semibold text-zinc-100">Console Log</h2>
+          <p id="consoleDesc" class="mt-1 text-sm text-zinc-500">Realtime events, state changes, and debug output</p>
+        </div>
+
+        <div
+          id="log"
+          class="min-h-[220px] max-h-[360px] overflow-y-auto px-5 py-4 font-mono text-sm leading-7 text-zinc-400 whitespace-pre-wrap break-words"
+        ></div>
+      </div>
+    </section>
+
+<!-- audio selection -->
+ <section class="mt-6 flex w-full flex-col items-start">
+  <div class="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900/90 p-5 shadow-xl shadow-black/20">
+    <div class="mb-4">
+      <h3  id="audioSectionTitle" class="text-base font-semibold text-white">Audio Device Settings</h3>
+      <p  id="audioSectionDesc" class="mt-1 text-sm text-zinc-400" >
+        Choose the microphone input and speaker output for the voice session.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label  id="audioInputLabel" for="audioInputSelect" class="mb-2 block text-sm font-medium text-zinc-200">
+          Audio Input
+        </label>
+        <select
+          id="audioInputSelect"
+          class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+        >
+          <option value="">Default System Input</option>
+        </select>
+        <p id="audioInputHint" class="mt-2 text-xs text-zinc-500">
+          Uses your system default microphone if no device is selected.
+        </p>
+      </div>
+
+      <div>
+        <label id="audioOutputLabel" for="audioOutputSelect" class="mb-2 block text-sm font-medium text-zinc-200">
+          Audio Output
+        </label>
+        <select
+          id="audioOutputSelect"
+          class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30"
+        >
+          <option value="">Default System Output</option>
+        </select>
+        <p id="audioOutputHint" class="mt-2 text-xs text-zinc-500">
+          Uses your system default speaker if no device is selected.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- Workflow -->
+    <section class="workflow-section mt-6">
+      <header class="workflow-header">
+        <div>
+          <p id="workflowEyebrow" class="workflow-eyebrow">Test Workflow</p>
+          <h2 id="workflowTitle" class="workflow-title">Dialogue Flow</h2>
+          <p id="workflowSummary" class="workflow-summary"></p>
+        </div>
+      </header>
+
+      <div class="workflow-toolbar" aria-label="Workflow controls">
+        <label class="workflow-field">
+          <span id="viewLabel">View</span>
+          <select id="workflowMode">
+            <option value="full">Full workflow</option>
+            <option value="happy">Successful booking</option>
+            <option value="reject">Rejected call</option>
+          </select>
+        </label>
+
+        <div id="languageButtons" class="language-buttons" aria-label="Workflow language"></div>
+        <button id="copyMermaid" type="button">Copy Mermaid</button>
+      </div>
+
+      <section class="diagram-shell" aria-label="Rendered workflow">
+        <svg id="workflowEdges" class="edges" aria-hidden="true"></svg>
+        <div id="workflowDiagram" class="diagram"></div>
+      </section>
+
+      <section class="code-panel" aria-label="Mermaid source">
+        <div class="panel-title">
+          <h2 id="sourceTitle">Mermaid Source</h2>
+          <span id="copyStatus" aria-live="polite"></span>
+        </div>
+        <pre id="mermaidSource"></pre>
+      </section>
+
+      <section class="details-panel" aria-label="Workflow step details">
+        <div class="panel-title">
+          <h2 id="detailsTitle">Step Details</h2>
+        </div>
+        <div id="workflowDetails" class="details-grid"></div>
+      </section>
+
+      <section class="workflow-editor-panel" aria-label="Workflow JSON editor">
+        <div class="panel-title">
+          <h2>Editable JSON</h2>
+          <span id="workflowSaveStatus" aria-live="polite"></span>
+        </div>
+        <textarea id="workflowJsonEditor" spellcheck="false"></textarea>
+        <div class="workflow-editor-actions">
+          <button id="saveWorkflowConfig" type="button">Save JSON</button>
+          <button id="reloadWorkflowConfig" type="button">Reload JSON</button>
+        </div>
+      </section>
+    </section>
+
+    <!-- Prompt -->
+    <section class="mt-6">
+      <div class="overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20">
+        <div class="border-b border-zinc-800 px-5 py-4">
+          <h2 id="promptTitle" class="text-lg font-semibold text-zinc-100">Prompt</h2>
+          <p id="promptDesc" class="mt-1 text-sm text-zinc-500">Current instruction payload / loaded prompt</p>
+        </div>
+
+        <pre
+          id="output"
+          class="min-h-[220px] overflow-x-auto px-5 py-4 font-mono text-sm leading-7 text-zinc-300 whitespace-pre-wrap break-words"
+        >Loading...</pre>
+      </div>
+    </section>
+
+
+
+<!-- for loading Logs -->
+  <script>
+    const log = document.getElementById("log");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const USRER_TRANSCRIPT = document.getElementById("User_transcript");
+
+    let pc = null;
+    let localStream = null;
+    let remoteAudio = null;
+    let dc = null;
+
+    function write(message) {
+      log.textContent += message + "\n";
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function addToConversation(role, text) {
+      // Add to display
+      const timeStamp = new Date().toLocaleTimeString();
+      const displayText = role === "user" 
+        ? `🎤 You (${timeStamp}): ${text}\n`
+        : `🤖 Assistant (${timeStamp}): ${text}\n`;
+      
+      USRER_TRANSCRIPT.textContent += displayText;
+      USRER_TRANSCRIPT.scrollTop = USRER_TRANSCRIPT.scrollHeight;
+      
+      // Send to server
+      fetch("http://localhost:3000/conversation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role, text })
+      }).catch(err => console.error("Failed to save conversation:", err));
+    }
+
+    async function startVoice() {
+      startBtn.disabled = true;
+      
+      try {
+        write("Fetching client secret...");
+        const tokenResp = await fetch("http://localhost:3000/session");
+        const tokenData = await tokenResp.json();
+        const EPHEMERAL_KEY = tokenData.value;
+
+
+        if (!tokenResp.ok) {
+          throw new Error("Session request failed: " + JSON.stringify(tokenData, null, 2));
+        }
+
+        if (!tokenData.value) {
+          throw new Error("Missing ephemeral key in response: " + JSON.stringify(tokenData, null, 2));
+        }
+
+
+        write("Opening microphone...");
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        pc = new RTCPeerConnection();
+
+        remoteAudio = document.createElement("audio");
+        remoteAudio.autoplay = true;
+
+        pc.ontrack = (event) => {
+          remoteAudio.srcObject = event.streams[0];
+          write("Remote audio connected.");
+        };
+
+        for (const track of localStream.getTracks()) {
+          pc.addTrack(track, localStream);
+        }
+
+        dc = pc.createDataChannel("oai-events");
+
+        dc.onopen = () => {
+          write("Data channel open.");
+        };
+
+        dc.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            write("EVENT: " + msg.type);
+
+            if (msg.type === "response.audio_transcript.done") {
+              write("Assistant transcript: " + msg.transcript);
+              addToConversation("assistant", msg.transcript);
+            }
+
+            if (msg.type === "conversation.item.input_audio_transcription.completed") {
+              write("User transcript: " + msg.transcript);
+              addToConversation("user", msg.transcript);
+            }
+          } catch {
+            write("RAW: " + event.data);
+          }
+        };
+
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        write("Sending SDP offer to OpenAI (GA WebRTC)...");
+        const sdpResponse = await fetch("https://api.openai.com/v1/realtime/calls", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${EPHEMERAL_KEY}`,
+            "Content-Type": "application/sdp"
+          },
+          body: offer.sdp
+        });
+
+        const answerSdp = await sdpResponse.text();
+
+        if (!sdpResponse.ok) {
+          throw new Error(answerSdp);
+        }
+
+        await pc.setRemoteDescription({
+          type: "answer",
+          sdp: answerSdp
+        });
+
+        write("Voice session started.");
+        stopBtn.disabled = false;
+      } catch (err) {
+        console.error(err);
+        write("ERROR: " + err.message);
+        startBtn.disabled = false;
+      }
+    }
+
+    function stopVoice() {
+      if (dc) {
+        dc.close();
+        dc = null;
+      }
+
+      if (pc) {
+        pc.getSenders().forEach(sender => {
+          if (sender.track) sender.track.stop();
+        });
+        pc.close();
+        pc = null;
+      }
+
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+
+      if (remoteAudio) {
+        remoteAudio.srcObject = null;
+        remoteAudio = null;
+      }
+
+      write("Voice session stopped.");
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
+
+    // The audio-device script below owns Start/Stop. Leaving this older
+    // prototype unbound prevents one click from opening two Realtime sessions.
+  </script>
+
+
+<!-- for language selection -->
+<script src="LanguageSelection.js">
+</script>
+
+
+<!-- audio script -->
+<script>
+  const audioInputSelect_audio = document.getElementById("audioInputSelect");
+  const audioOutputSelect_audio = document.getElementById("audioOutputSelect");
+  const log_audio = document.getElementById("log");
+  const startBtn_audio = document.getElementById("startBtn");
+  const stopBtn_audio = document.getElementById("stopBtn");
+  const USRER_TRANSCRIPT_audio = document.getElementById("User_transcript");
+  const aiReplyText_audio = document.getElementById("aiReplyText");
+  const textChatForm_audio = document.getElementById("textChatForm");
+  const textChatInput_audio = document.getElementById("textChatInput");
+  const textChatSend_audio = document.getElementById("textChatSend");
+  const promptOutput_audio = document.getElementById("output");
+
+  let pc_audio = null;
+  let localStream_audio = null;
+  let remoteAudio_audio = null;
+  let dc_audio = null;
+  let activeAssistantText_audio = "";
+  let currentInstructionMode_audio = "default";
+  let lastAssistantFinal_audio = "";
+  let lastAssistantFinalAt_audio = 0;
+
+  function write_audio(message) {
+    if (log_audio) {
+      log_audio.textContent += message + "\n";
+      log_audio.scrollTop = log_audio.scrollHeight;
+    }
+  }
+
+  function addToConversation_audio(role, text) {
+    // Add to display
+    const timeStamp = new Date().toLocaleTimeString();
+    const displayText = role === "user" 
+      ? `🎤 You (${timeStamp}): ${text}\n`
+      : `🤖 Assistant (${timeStamp}): ${text}\n`;
+    
+    if (USRER_TRANSCRIPT_audio) {
+      USRER_TRANSCRIPT_audio.textContent += displayText;
+      USRER_TRANSCRIPT_audio.scrollTop = USRER_TRANSCRIPT_audio.scrollHeight;
+    }
+    
+    // Send to server
+    fetch("http://localhost:3000/conversation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, text })
+    }).catch(err => console.error("Failed to save conversation:", err));
+  }
+
+  function setLatestAiReply_audio(text) {
+    if (!text || !aiReplyText_audio) return;
+    aiReplyText_audio.textContent = text;
+    aiReplyText_audio.scrollTop = aiReplyText_audio.scrollHeight;
+  }
+
+  async function refreshInstructionPrompt_audio(mode = currentInstructionMode_audio) {
+    currentInstructionMode_audio = mode;
+
+    const response = await fetch(`http://localhost:3000/instruction?mode=${encodeURIComponent(mode)}`);
+    const instructionText = await response.text();
+
+    if (promptOutput_audio) {
+      promptOutput_audio.textContent = instructionText;
+    }
+
+    if (dc_audio && dc_audio.readyState === "open") {
+      dc_audio.send(JSON.stringify({
+        type: "session.update",
+        session: {
+          instructions: instructionText,
+          output_modalities: mode === "default" ? ["audio"] : ["text"]
+        }
+      }));
+      write_audio("Realtime prompt updated: " + mode);
+    }
+
+    return instructionText;
+  }
+
+  function addConversationEntry_audio(role, text) {
+    if (!text) return;
+
+    const timeStamp = new Date().toLocaleTimeString();
+    const displayText = role === "user"
+      ? `You (${timeStamp}): ${text}\n`
+      : `Assistant (${timeStamp}): ${text}\n`;
+
+    if (USRER_TRANSCRIPT_audio) {
+      USRER_TRANSCRIPT_audio.textContent += displayText;
+      USRER_TRANSCRIPT_audio.scrollTop = USRER_TRANSCRIPT_audio.scrollHeight;
+    }
+
+    if (role === "assistant") {
+      setLatestAiReply_audio(text);
+    }
+
+    fetch("http://localhost:3000/conversation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, text })
+    })
+      .then(() => refreshInstructionPrompt_audio())
+      .catch(err => console.error("Failed to save conversation:", err));
+  }
+
+  function publishAssistantReply_audio(text) {
+    const finalText = (text || "").trim();
+    if (!finalText) return;
+
+    const now = Date.now();
+    if (finalText === lastAssistantFinal_audio && now - lastAssistantFinalAt_audio < 2000) {
+      return;
+    }
+
+    lastAssistantFinal_audio = finalText;
+    lastAssistantFinalAt_audio = now;
+    write_audio("Assistant reply: " + finalText);
+    addConversationEntry_audio("assistant", finalText);
+    window.dispatchEvent(new CustomEvent("voai:assistant-reply", { detail: { text: finalText } }));
+  }
+
+  function handleRealtimeMessage_audio(msg_audio) {
+    write_audio("EVENT: " + msg_audio.type);
+
+    if (msg_audio.type === "response.created") {
+      activeAssistantText_audio = "";
+    }
+
+    function extractTextFromContent_audio(content) {
+      if (!content) return "";
+      if (typeof content === "string") return content;
+      if (!Array.isArray(content)) return "";
+
+      return content
+        .map((part) => part?.text || part?.transcript || "")
+        .filter(Boolean)
+        .join("");
+    }
+
+    const assistantDelta =
+      msg_audio.delta ||
+      msg_audio.text ||
+      msg_audio.transcript ||
+      msg_audio.audio_transcript;
+
+    if (
+      msg_audio.type === "response.audio_transcript.delta" ||
+      msg_audio.type === "response.output_audio_transcript.delta" ||
+      msg_audio.type === "response.output_text.delta" ||
+      msg_audio.type === "response.text.delta"
+    ) {
+      activeAssistantText_audio += assistantDelta || "";
+      setLatestAiReply_audio(activeAssistantText_audio);
+      return;
+    }
+
+    if (
+      msg_audio.type === "response.audio_transcript.done" ||
+      msg_audio.type === "response.output_audio_transcript.done" ||
+      msg_audio.type === "response.output_text.done" ||
+      msg_audio.type === "response.text.done"
+    ) {
+      const finalText = msg_audio.transcript || msg_audio.text || activeAssistantText_audio;
+      publishAssistantReply_audio(finalText);
+      activeAssistantText_audio = "";
+      return;
+    }
+
+    if (
+      msg_audio.type === "conversation.item.done" &&
+      msg_audio.item?.role === "assistant"
+    ) {
+      const finalText =
+        extractTextFromContent_audio(msg_audio.item.content) ||
+        activeAssistantText_audio;
+
+      if (finalText) {
+        publishAssistantReply_audio(finalText);
+        activeAssistantText_audio = "";
+      }
+      return;
+    }
+
+    if (msg_audio.type === "conversation.item.input_audio_transcription.completed") {
+      write_audio("User transcript: " + msg_audio.transcript);
+      addConversationEntry_audio("user", msg_audio.transcript);
+      window.dispatchEvent(new CustomEvent("voai:user-transcript", { detail: { text: msg_audio.transcript } }));
+    }
+  }
+
+  function sendTextMessage_audio(text) {
+    if (!dc_audio || dc_audio.readyState !== "open") {
+      throw new Error("Start the voice session before sending text.");
+    }
+
+    dc_audio.send(JSON.stringify({
+      type: "conversation.item.create",
+      item: {
+        type: "message",
+        role: "user",
+        content: [
+          {
+            type: "input_text",
+            text
+          }
+        ]
+      }
+    }));
+
+    dc_audio.send(JSON.stringify({
+      type: "response.create"
+    }));
+  }
+
+  async function loadAudioDevices_audio() {
+    try {
+      const tempStream_audio = await navigator.mediaDevices.getUserMedia({ audio: true });
+      tempStream_audio.getTracks().forEach(track_audio => track_audio.stop());
+
+      const devices_audio = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs_audio = devices_audio.filter(device_audio => device_audio.kind === "audioinput");
+      const audioOutputs_audio = devices_audio.filter(device_audio => device_audio.kind === "audiooutput");
+
+      audioInputSelect_audio.innerHTML = `<option value="">Default System Input</option>`;
+      audioOutputSelect_audio.innerHTML = `<option value="">Default System Output</option>`;
+
+      audioInputs_audio.forEach((device_audio, index_audio) => {
+        const option_audio = document.createElement("option");
+        option_audio.value = device_audio.deviceId;
+        option_audio.textContent = device_audio.label || `Microphone ${index_audio + 1}`;
+        audioInputSelect_audio.appendChild(option_audio);
+      });
+
+      audioOutputs_audio.forEach((device_audio, index_audio) => {
+        const option_audio = document.createElement("option");
+        option_audio.value = device_audio.deviceId;
+        option_audio.textContent = device_audio.label || `Speaker ${index_audio + 1}`;
+        audioOutputSelect_audio.appendChild(option_audio);
+      });
+
+      write_audio("Audio input/output list loaded.");
+    } catch (err) {
+      console.error(err);
+      write_audio("ERROR loading audio devices: " + err.message);
+    }
+  }
+
+  async function getSelectedAudioStream_audio() {
+    const selectedDeviceId_audio = audioInputSelect_audio.value;
+
+    if (!selectedDeviceId_audio) {
+      write_audio("Using default system audio input...");
+      return await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+    }
+
+    write_audio("Using selected audio input device...");
+    return await navigator.mediaDevices.getUserMedia({
+      audio: {
+        deviceId: { exact: selectedDeviceId_audio }
+      }
+    });
+  }
+
+  async function setAudioOutputDevice_audio() {
+    if (!remoteAudio_audio) return;
+
+    const selectedOutputDeviceId_audio = audioOutputSelect_audio.value;
+
+    if (!selectedOutputDeviceId_audio) {
+      write_audio("Using default system audio output...");
+      return;
+    }
+
+    if (typeof remoteAudio_audio.setSinkId !== "function") {
+      write_audio("This browser does not support selecting audio output device.");
+      return;
+    }
+
+    try {
+      await remoteAudio_audio.setSinkId(selectedOutputDeviceId_audio);
+      write_audio("Using selected audio output device.");
+    } catch (err) {
+      console.error(err);
+      write_audio("ERROR setting audio output device: " + err.message);
+    }
+  }
+
+  async function startVoice_audio() {
+    startBtn_audio.disabled = true;
+
+    try {
+      write_audio("Fetching client secret...");
+      const tokenResp_audio = await fetch(`http://localhost:3000/session?mode=${encodeURIComponent(currentInstructionMode_audio)}`);
+      const tokenData_audio = await tokenResp_audio.json();
+      const EPHEMERAL_KEY_audio = tokenData_audio.value;
+
+      if (!tokenResp_audio.ok) {
+        throw new Error("Session request failed: " + JSON.stringify(tokenData_audio, null, 2));
+      }
+
+      if (!tokenData_audio.value) {
+        throw new Error("Missing ephemeral key in response: " + JSON.stringify(tokenData_audio, null, 2));
+      }
+
+      write_audio("Opening microphone...");
+      localStream_audio = await getSelectedAudioStream_audio();
+
+      const audioTrack_audio = localStream_audio.getAudioTracks()[0];
+      if (audioTrack_audio) {
+        const settings_audio = audioTrack_audio.getSettings();
+        write_audio("Connected input deviceId: " + (settings_audio.deviceId || "default/hidden"));
+      }
+
+      pc_audio = new RTCPeerConnection();
+
+      remoteAudio_audio = document.createElement("audio");
+      remoteAudio_audio.autoplay = true;
+
+      pc_audio.ontrack = async (event) => {
+        remoteAudio_audio.srcObject = event.streams[0];
+        await setAudioOutputDevice_audio();
+        write_audio("Remote audio connected.");
+      };
+
+      for (const track_audio of localStream_audio.getTracks()) {
+        pc_audio.addTrack(track_audio, localStream_audio);
+      }
+
+      dc_audio = pc_audio.createDataChannel("oai-events");
+
+      dc_audio.onopen = () => {
+        write_audio("Data channel open.");
+      };
+
+      dc_audio.onmessage = (event) => {
+        try {
+          const msg_audio = JSON.parse(event.data);
+          handleRealtimeMessage_audio(msg_audio);
+        } catch {
+          write_audio("RAW: " + event.data);
+        }
+      };
+
+      const offer_audio = await pc_audio.createOffer();
+      await pc_audio.setLocalDescription(offer_audio);
+
+      write_audio("Sending SDP offer to OpenAI (GA WebRTC)...");
+      const sdpResponse_audio = await fetch("https://api.openai.com/v1/realtime/calls", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${EPHEMERAL_KEY_audio}`,
+          "Content-Type": "application/sdp"
+        },
+        body: offer_audio.sdp
+      });
+
+      const answerSdp_audio = await sdpResponse_audio.text();
+
+      if (!sdpResponse_audio.ok) {
+        throw new Error(answerSdp_audio);
+      }
+
+      await pc_audio.setRemoteDescription({
+        type: "answer",
+        sdp: answerSdp_audio
+      });
+
+      write_audio("Voice session started.");
+      stopBtn_audio.disabled = false;
+    } catch (err) {
+      console.error(err);
+      write_audio("ERROR: " + err.message);
+      startBtn_audio.disabled = false;
+    }
+  }
+
+  function stopVoice_audio() {
+    if (dc_audio) {
+      dc_audio.close();
+      dc_audio = null;
+    }
+
+    if (pc_audio) {
+      pc_audio.getSenders().forEach(sender_audio => {
+        if (sender_audio.track) sender_audio.track.stop();
+      });
+      pc_audio.close();
+      pc_audio = null;
+    }
+
+    if (localStream_audio) {
+      localStream_audio.getTracks().forEach(track_audio => track_audio.stop());
+      localStream_audio = null;
+    }
+
+    if (remoteAudio_audio) {
+      remoteAudio_audio.srcObject = null;
+      remoteAudio_audio = null;
+    }
+
+    write_audio("Voice session stopped.");
+    startBtn_audio.disabled = false;
+    stopBtn_audio.disabled = true;
+  }
+
+  async function addSystemHistory_audio(text) {
+    await fetch("http://localhost:3000/conversation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role: "system", text })
+    });
+    await refreshInstructionPrompt_audio();
+  }
+
+  window.voaiAudio = {
+    startVoice: startVoice_audio,
+    stopVoice: stopVoice_audio,
+    isSessionReady: () => Boolean(dc_audio && dc_audio.readyState === "open"),
+    setInstructionMode: refreshInstructionPrompt_audio,
+    addSystemHistory: addSystemHistory_audio,
+    write: write_audio
+  };
+
+  startBtn_audio.addEventListener("click", startVoice_audio);
+  stopBtn_audio.addEventListener("click", stopVoice_audio);
+
+  if (textChatForm_audio) {
+    textChatForm_audio.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const text = textChatInput_audio.value.trim();
+      if (!text) return;
+
+      try {
+        addConversationEntry_audio("user", text);
+        sendTextMessage_audio(text);
+        textChatInput_audio.value = "";
+      } catch (err) {
+        write_audio("Text send error: " + err.message);
+      }
+    });
+  }
+
+  audioOutputSelect_audio.addEventListener("change", async () => {
+    if (remoteAudio_audio) {
+      await setAudioOutputDevice_audio();
+    }
+  });
+
+  window.addEventListener("load", loadAudioDevices_audio);
+  navigator.mediaDevices.addEventListener("devicechange", loadAudioDevices_audio);
+</script>
+
+<script src="TestDialogueFlow.js"></script>
+<script src="workflow-diagram.js"></script>
+
+
+<!-- call button -->
+<script src="CallBtn">
+</script>
+
+
+<!-- Load JSON -->
+<script>
+  async function loadJSON() {
+    try {
+      const response = await fetch("http://localhost:3000/instruction");
+      const data = await response.text();
+      document.getElementById("output").textContent = data;
+    } catch (error) {
+      document.getElementById("output").textContent =
+        "Error: " + error.message;
+    }
+  }
+
+  loadJSON();
+</script>
+
+</body>
+</html>

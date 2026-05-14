@@ -1,0 +1,381 @@
+.workflow-section {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f4f4f5;
+}
+
+.workflow-section * {
+  box-sizing: border-box;
+}
+
+.workflow-section button,
+.workflow-section select {
+  font: inherit;
+}
+
+.workflow-section.page {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 32px 24px 48px;
+}
+
+.workflow-header {
+  align-items: flex-start;
+  border-bottom: 1px solid #27272a;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-bottom: 24px;
+}
+
+.workflow-eyebrow {
+  color: #a1a1aa;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.workflow-section h1,
+.workflow-section h2,
+.workflow-section h3,
+.workflow-section p {
+  margin: 0;
+}
+
+.workflow-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.workflow-section h2 {
+  font-size: 16px;
+}
+
+.workflow-summary {
+  color: #a1a1aa;
+  line-height: 1.6;
+  margin-top: 10px;
+  max-width: 640px;
+}
+
+.workflow-section .back-link,
+.workflow-toolbar > button {
+  align-items: center;
+  background: #f4f4f5;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  color: #18181b;
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 14px;
+  text-decoration: none;
+}
+
+.workflow-toolbar > button {
+  cursor: pointer;
+}
+
+.workflow-toolbar {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 24px 0;
+}
+
+.workflow-section .language-buttons {
+  align-items: center;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  display: inline-flex;
+  gap: 4px;
+  min-height: 40px;
+  padding: 4px;
+}
+
+.workflow-section .language-button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #d4d4d8;
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 30px;
+  padding: 0 12px;
+}
+
+.workflow-section .language-button.is-active {
+  background: #f4f4f5;
+  border-color: #e4e4e7;
+  color: #18181b;
+}
+
+.workflow-field {
+  color: #d4d4d8;
+  display: grid;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.workflow-field span {
+  color: #a1a1aa;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.workflow-section select {
+  appearance: none;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  color: #f4f4f5;
+  min-height: 40px;
+  padding: 0 36px 0 12px;
+}
+
+.workflow-section .diagram-shell {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  min-height: 620px;
+  overflow: auto;
+  padding: 28px;
+  position: relative;
+}
+
+.workflow-section .diagram {
+  display: grid;
+  gap: 42px;
+  grid-template-columns: repeat(4, minmax(190px, 1fr));
+  min-width: 940px;
+  position: relative;
+  z-index: 1;
+}
+
+.workflow-section .node {
+  align-self: start;
+  background: #09090b;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.22);
+  min-height: 128px;
+  padding: 16px;
+}
+
+.workflow-section .node.is-start {
+  border-color: #38bdf8;
+}
+
+.workflow-section .node.is-decision {
+  border-color: #facc15;
+}
+
+.workflow-section .node.is-end {
+  border-color: #34d399;
+}
+
+.workflow-section .node-title {
+  color: #fafafa;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.workflow-section .node-detail {
+  color: #a1a1aa;
+  font-size: 13px;
+  line-height: 1.55;
+  margin-top: 8px;
+}
+
+.workflow-section .node-meta {
+  color: #67e8f9;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  margin-top: 12px;
+  word-break: break-word;
+}
+
+.workflow-section .edges {
+  height: 100%;
+  left: 0;
+  min-height: 620px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.workflow-section .edge-label {
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  border-radius: 999px;
+  color: #e4e4e7;
+  font-size: 12px;
+  padding: 2px 8px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.workflow-section .code-panel,
+.workflow-section .details-panel,
+.workflow-section .workflow-editor-panel {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  margin-top: 24px;
+  overflow: hidden;
+}
+
+.workflow-section #workflowJsonEditor {
+  background: #09090b;
+  border: 0;
+  color: #d4d4d8;
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  min-height: 360px;
+  outline: none;
+  padding: 16px;
+  resize: vertical;
+  width: 100%;
+}
+
+.workflow-editor-actions {
+  border-top: 1px solid #27272a;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px 16px;
+}
+
+.workflow-editor-actions button {
+  align-items: center;
+  background: #f4f4f5;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  color: #18181b;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+#workflowSaveStatus {
+  color: #86efac;
+  font-size: 13px;
+}
+
+.workflow-section .details-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  padding: 16px;
+}
+
+.workflow-section .detail-card {
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.workflow-section .detail-card h3 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.workflow-section .detail-card p {
+  color: #a1a1aa;
+  font-size: 13px;
+  line-height: 1.55;
+  margin-top: 8px;
+}
+
+.workflow-section .detail-card dl {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.workflow-section .detail-row {
+  border-top: 1px solid #27272a;
+  display: grid;
+  gap: 4px;
+  padding-top: 8px;
+}
+
+.workflow-section .detail-row dt {
+  color: #67e8f9;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.workflow-section .detail-row dd {
+  color: #e4e4e7;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.workflow-section .detail-id {
+  color: #71717a;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.workflow-section .panel-title {
+  align-items: center;
+  border-bottom: 1px solid #27272a;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.workflow-section #copyStatus {
+  color: #86efac;
+  font-size: 13px;
+}
+
+.workflow-section pre {
+  color: #d4d4d8;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0;
+  overflow: auto;
+  padding: 16px;
+  white-space: pre;
+}
+
+@media (max-width: 760px) {
+  .workflow-section.page {
+    padding: 22px 16px 32px;
+  }
+
+  .workflow-header {
+    display: grid;
+  }
+
+  .workflow-title {
+    font-size: 30px;
+  }
+
+  .workflow-section .diagram-shell {
+    padding: 18px;
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "automated_customer_service",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@openrouter/sdk": "^0.9.11",
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "multer": "^2.1.1"
+  },
+  "description": "This project is a browser-based voice chat prototype built on the OpenAI Realtime API using WebRTC. It captures microphone audio from the browser, sends the SDP offer to the backend, and connects to OpenAI for real-time speech-to-speech interaction.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nyxz1828/Realtime_Customer_Service_VoiceChat_with_OpenAI_API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nyxz1828/Realtime_Customer_Service_VoiceChat_with_OpenAI_API/issues"
+  },
+  "homepage": "https://github.com/Nyxz1828/Realtime_Customer_Service_VoiceChat_with_OpenAI_API#readme"
+}

@@ -1,0 +1,24 @@
+
+# secrets / local config
+.env
+*.env
+config.local.*
+secrets.*
+*.key
+*.pem
+
+# compiled binaries
+*.exe
+Demo/test/*.exe
+
+# secrets / local config
+.env
+*.env
+config.local.*
+secrets.*
+*.key
+*.pem
+
+# compiled binaries
+*.exe
+Demo/test/*.exe
